@@ -13,4 +13,74 @@
     </a>
   </div>
 </header>
+
+<form class="input-group mb-4" action="{% url 'stories:list' %}" method="get">
+  <input type="search" class="form-control" name="q"
+         placeholder="Search stories, places, itineraries…">
+  <button class="btn btn-outline-secondary" type="submit">Search</button>
+</form>
+
+<section class="mb-5">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <h2 class="h4 m-0">Trending</h2>
+    <a href="{% url 'stories:list' %}" class="small">All stories →</a>
+  </div>
+  <div class="row g-3">
+    {% for s in trending %}
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card h-100">
+        {% if s.cover_image %}
+          <img src="{{ s.cover_image.url }}" class="card-img-top" alt="">
+        {% endif %}
+        <div class="card-body">
+          <h3 class="h5">
+            <a href="{{ s.get_absolute_url }}">{{ s.title }}</a>
+          </h3>
+          <p class="text-muted small mb-1">
+            {{ s.author }} · {{ s.created|date:"M j, Y" }}
+            {% if s.category %} · {{ s.category.name }}{% endif %}
+          </p>
+          <p class="mb-2">{{ s.content|truncatewords:22 }}</p>
+          <span class="badge text-bg-success">
+            Score:
+            {{ s.score|default:0 }}
+          </span>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+      <p class="text-muted">No trending stories yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section>
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <h2 class="h4 m-0">Latest</h2>
+    <a href="{% url 'stories:list' %}" class="small">Browse more →</a>
+  </div>
+  <div class="row g-3">
+    {% for s in latest %}
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card h-100">
+        {% if s.cover_image %}
+          <img src="{{ s.cover_image.url }}" class="card-img-top" alt="">
+        {% endif %}
+        <div class="card-body">
+          <h3 class="h5">
+            <a href="{{ s.get_absolute_url }}">{{ s.title }}</a>
+          </h3>
+          <p class="text-muted small mb-1">
+            {{ s.author }} · {{ s.created|date:"M j, Y" }}
+            {% if s.category %} · {{ s.category.name }}{% endif %}
+          </p>
+          <p class="mb-0">{{ s.content|truncatewords:22 }}</p>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+      <p class="text-muted">No stories yet — be the first to post!</p>
+    {% endfor %}
+  </div>
+</section>
 {% endblock %}

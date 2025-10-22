@@ -1,0 +1,47 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Layn Letters{% endblock %}</title>
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  </head>
+  <body>
+    {% include 'includes/_navbar.html' %}
+
+    <main class="container py-4">
+      {% include 'includes/_messages.html' %}
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="border-top py-4 text-center small">
+      <p class="mb-1">
+        Contact:
+        <a href="mailto:hello@laynletters.example">hello@laynletters.example</a>
+        · <a href="tel:+123456789">+1 234 567 89</a>
+      </p>
+      <p class="mb-0">
+        <a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a> ·
+        <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a> ·
+        <a href="https://x.com" target="_blank" rel="noopener">X</a>
+      </p>
+    </footer>
+
+    <!-- Bootstrap JS (no jQuery needed) -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <!-- Budget live preview -->
+    <script src="{% static 'js/budget_preview.js' %}"></script>
+  </body>
+</html>
