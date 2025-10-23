@@ -108,6 +108,8 @@ AUTHENTICATION_BACKENDS = [
 LOGIN_REDIRECT_URL = 'core:home'
 ACCOUNT_EMAIL_VERIFICATION = 'none'  # dev only
 
+SITE_OWNER_USERNAME = os.environ.get("SITE_OWNER_USERNAME", "")
+
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
