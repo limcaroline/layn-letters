@@ -9,6 +9,7 @@ from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView
 )
 from .models import Story, Vote
+from core.utils import is_site_owner
 
 
 # Create your views here.
@@ -32,7 +33,17 @@ class StoryDetail(DetailView):
         return ctx
 
 
-class StoryCreate(LoginRequiredMixin, CreateView):
+class OwnerOnly(UserPassesTestMixin):
+    def test_func(self):
+        return is_site_owner(self.request.user)
+
+
+class AuthorRequired(UserPassesTestMixin):
+    def test_func(self):
+        return self.get_object().author == self.request.user
+
+
+class StoryCreate(LoginRequiredMixin, OwnerOnly, CreateView):
     model = Story
     fields = ["title", "content", "category", "cover_image", "status"]
 
@@ -41,17 +52,12 @@ class StoryCreate(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class AuthorRequired(UserPassesTestMixin):
-    def test_func(self):
-        return self.get_object().author == self.request.user
-
-
-class StoryUpdate(LoginRequiredMixin, AuthorRequired, UpdateView):
+class StoryUpdate(LoginRequiredMixin, AuthorRequired, OwnerOnly, UpdateView):
     model = Story
     fields = ["title", "content", "category", "cover_image", "status"]
 
 
-class StoryDelete(LoginRequiredMixin, AuthorRequired, DeleteView):
+class StoryDelete(LoginRequiredMixin, AuthorRequired, OwnerOnly, DeleteView):
     model = Story
     success_url = reverse_lazy("stories:list")
 
