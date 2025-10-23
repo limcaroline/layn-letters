@@ -81,3 +81,16 @@ class Vote(models.Model):
 
     class Meta:
         unique_together = ("story", "user")
+
+
+class CommentVote(models.Model):
+    comment = models.ForeignKey(
+        Comment, on_delete=models.CASCADE, related_name="votes"
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
+    )
+    value = models.SmallIntegerField(choices=[(-1, "Down"), (1, "Up")])
+
+    class Meta:
+        unique_together = ("comment", "user")
