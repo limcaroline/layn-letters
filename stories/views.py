@@ -25,6 +25,12 @@ class StoryDetail(DetailView):
     model = Story
     slug_field = "slug"
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        score = self.object.votes.aggregate(total=Sum("value"))["total"] or 0
+        ctx["score"] = score
+        return ctx
+
 
 class StoryCreate(LoginRequiredMixin, CreateView):
     model = Story
