@@ -1,0 +1,29 @@
+/* CSS custom overrides */
+
+:root {
+  --brand-radius: 12px;
+}
+
+body {
+  line-height: 1.6;
+}
+
+/* Card polish */
+.card {
+  border-radius: var(--brand-radius);
+}
+.card img {
+  border-top-left-radius: var(--brand-radius);
+  border-top-right-radius: var(--brand-radius);
+  object-fit: cover;
+}
+
+/* Navbar brand spacing */
+.navbar-brand {
+  letter-spacing: .3px;
+}
+
+/* Utilities */
+.container-narrow {
+  max-width: 800px;
+}
