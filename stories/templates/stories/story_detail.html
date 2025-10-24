@@ -43,4 +43,33 @@
   document.getElementById("downvote").onclick = () => send(-1);
 })();
 </script>
+
+<hr class="my-4">
+<h2 class="h5">Comments</h2>
+
+{% if user.is_authenticated %}
+<form method="post" class="mb-3">
+  {% csrf_token %}
+  {{ comment_form.as_p }}
+  <button class="btn btn-primary btn-sm">Add Comment</button>
+</form>
+{% else %}
+<p class="text-muted">Log in to comment.</p>
+{% endif %}
+
+<ul class="list-unstyled">
+  {% for c in comments %}
+  <li class="mb-3">
+    <div class="border rounded p-2">
+      <div class="small text-muted mb-1">
+        {{ c.author }} · {{ c.created|date:"M j, Y H:i" }}
+      </div>
+      <div>{{ c.body|linebreaks }}</div>
+    </div>
+  </li>
+  {% empty %}
+    <li class="text-muted">No comments yet.</li>
+  {% endfor %}
+</ul>
+
 {% endblock %}
