@@ -11,6 +11,7 @@ from django.views.generic import (
 from .models import Story, Vote, Comment, CommentVote
 from django.db.models import Sum
 from core.utils import is_site_owner
+from .forms import CommentForm
 
 
 # Create your views here.
@@ -29,9 +30,40 @@ class StoryDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        score = self.object.votes.aggregate(total=Sum("value"))["total"] or 0
-        ctx["score"] = score
+        ctx["comment_form"] = CommentForm()
+        ctx["comments"] = (
+            Comment.objects.filter(story=self.object, parent__isnull=True)
+                           .select_related("author")
+                           .order_by("-created")
+        )
+        ctx["score"] = (
+            self.object.votes.aggregate(total=Sum("value"))["total"] or 0
+        )
         return ctx
+
+    def post(self, request, *args, **kwargs):
+        """Handle new top-level comment submissions."""
+        self.object = self.get_object()
+        if not request.user.is_authenticated:
+            return redirect("account_login")
+
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            cm = form.save(commit=False)
+            cm.story = self.object
+            cm.author = request.user
+            # (Optional) support replies
+            # if you later add a hidden parent_id input
+            parent_id = request.POST.get("parent_id")
+            if parent_id:
+                try:
+                    cm.parent = Comment.objects.get(
+                        id=int(parent_id), story=self.object
+                    )
+                except (ValueError, Comment.DoesNotExist):
+                    pass
+            cm.save()
+        return redirect(self.object.get_absolute_url())
 
 
 class OwnerOnly(UserPassesTestMixin):
@@ -86,9 +118,13 @@ class CommentEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class CommentDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Comment
+
     def test_func(self):
         c = self.get_object()
-        return c.author == self.request.user or is_site_owner(self.request.user)
+        return c.author == (
+            self.request.user or is_site_owner(self.request.user)
+        )
+
     def get_success_url(self): return self.object.story.get_absolute_url()
 
 
