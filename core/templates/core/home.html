@@ -8,9 +8,13 @@
     <p class="lead mb-3">
       Real travel stories, itineraries, reviews, and simple budgets.
     </p>
-    <a class="btn btn-primary btn-lg" href="{% url 'stories:create' %}">
-      Share a Story
-    </a>
+    {% if user.is_authenticated %}
+        {% if user.is_staff or user.username == SITE_OWNER_USERNAME %}
+            <a class="btn btn-primary btn-lg" href="{% url 'stories:create' %}">
+                Share a Story
+            </a>
+        {% endif %}
+    {% endif %}
   </div>
 </header>
 

@@ -25,18 +25,31 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-insecure')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.environ.get('DEBUG', '') == 'on'#
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', '') == 'on'
 
 """ ALLOWED_HOSTS = (
     os.environ.get('ALLOWED_HOSTS', '').split(',')
     if not DEBUG else ['*']
     ) """
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = (
+    ["*"] if DEBUG else
+    [h.strip() for h in os.environ.get("ALLOWED_HOSTS", "")
+     .split(",") if h.strip()]
+)
 
+# --- Security: production-only (Heroku/Cloud) ---
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    # (Optional but recommended)
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -106,7 +119,11 @@ AUTHENTICATION_BACKENDS = [
   'django.contrib.auth.backends.ModelBackend',
   'allauth.account.auth_backends.AuthenticationBackend',
 ]
+LOGIN_URL = "account_login"
 LOGIN_REDIRECT_URL = 'core:home'
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'  # dev only
 
 SITE_OWNER_USERNAME = os.environ.get("SITE_OWNER_USERNAME", "")
@@ -151,8 +168,6 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
-
 USE_TZ = True
 
 
@@ -177,4 +192,5 @@ MEDIA_ROOT = BASE_DIR / "media"
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1",
     "http://localhost",
-]
+] + [u.strip() for u in os.environ.get("CSRF_TRUSTED_ORIGINS", "")
+     .split(",") if u.strip()]

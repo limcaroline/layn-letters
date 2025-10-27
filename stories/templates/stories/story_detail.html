@@ -14,11 +14,15 @@
 </article>
 
 <div class="d-flex gap-2 mb-4">
-  {% if user.is_authenticated and (user.is_staff or user.username == SITE_OWNER_USERNAME) and user == object.author %}
+  {% if user.is_authenticated %}
+    {% if user.is_staff or user.username == SITE_OWNER_USERNAME %}
+      {% if user == object.author %}
     <a class="btn btn-outline-secondary"
        href="{% url 'stories:edit' object.slug %}">Edit</a>
     <a class="btn btn-outline-danger"
        href="{% url 'stories:delete' object.slug %}">Delete</a>
+      {% endif %}
+    {% endif %}
   {% endif %}
 
   <button class="btn btn-success" id="upvote">👍 Upvote</button>
