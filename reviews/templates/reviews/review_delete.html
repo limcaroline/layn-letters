@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}{{ object.title }} — Layn Letters{% endblock %}
+{% block content %}
+<article class="mb-4">
+  <h1 class="h4">{{ object.title }}</h1>
+  <p class="text-muted small">
+    {{ object.place.name }} — ★ {{ object.rating }} —
+    {{ object.author }} · {{ object.created|date:"M j, Y" }}
+  </p>
+  {% if object.place.city or object.place.country %}
+    <p class="small text-muted">
+      {{ object.place.city }} {{ object.place.country }}
+    </p>
+  {% endif %}
+  <div class="mb-3">{{ object.body|linebreaks }}</div>
+
+  {% if user.is_authenticated %}
+    {% if user.is_staff or user.username == SITE_OWNER_USERNAME %}
+      {% if user == object.author %}
+        <a class="btn btn-outline-secondary"
+           href="{% url 'reviews:edit' object.pk %}">Edit</a>
+        <a class="btn btn-outline-danger"
+           href="{% url 'reviews:delete' object.pk %}">Delete</a>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+</article>
+
+<hr class="my-4">
+<h2 class="h5">Comments</h2>
+
+{% if user.is_authenticated %}
+<form method="post" class="mb-3">
+  {% csrf_token %}
+  {{ comment_form.as_p }}
+  <button class="btn btn-primary btn-sm">Add Comment</button>
+</form>
+{% else %}
+<p class="text-muted">Log in to comment.</p>
+{% endif %}
+
+<ul class="list-unstyled">
+  {% for c in comments %}
+  <li class="mb-3">
+    <div class="border rounded p-2">
+      <div class="small text-muted mb-1">
+        {{ c.author }} · {{ c.created|date:"M j, Y H:i" }}
+      </div>
+      <div class="mb-2">{{ c.body|linebreaks }}</div>
+      {% if user.is_authenticated %}
+        {% if user == c.author %}
+          <a class="btn btn-sm btn-outline-secondary"
+             href="{% url 'reviews:comment_edit' c.pk %}">Edit</a>
+          <a class="btn btn-sm btn-outline-danger"
+             href="{% url 'reviews:comment_delete' c.pk %}">Delete</a>
+        {% endif %}
+        <form class="d-inline" method="post"
+              action="{% url 'reviews:comment_vote' c.pk %}">
+          {% csrf_token %}
+          <input type="hidden" name="value" value="1">
+          <button class="btn btn-sm btn-success">👍</button>
+        </form>
+        <form class="d-inline" method="post"
+              action="{% url 'reviews:comment_vote' c.pk %}">
+          {% csrf_token %}
+          <input type="hidden" name="value" value="-1">
+          <button class="btn btn-sm btn-outline-secondary">👎</button>
+        </form>
+      {% endif %}
+    </div>
+  </li>
+  {% empty %}
+  <li class="text-muted">No comments yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
