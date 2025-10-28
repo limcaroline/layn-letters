@@ -7,25 +7,24 @@ from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView
 )
 from django.shortcuts import redirect
-from core.utils import is_site_owner
 from .models import Budget, BudgetItem
+from .forms import BudgetItemForm
 
 
 # Create your views here.
-class OwnerOnly(UserPassesTestMixin):
+class AuthorOnly(UserPassesTestMixin):
     def test_func(self):
         obj = getattr(self, "object", None)
-        if obj is None:
-            return False
-        return obj.author == self.request.user
+        return bool(obj and obj.author == self.request.user)
 
 
 ItemFormSet = inlineformset_factory(
-    Budget, BudgetItem,
-    fields=[
-        "name", "category", "day", "quantity", "unit_cost", "notes"
-    ],
-    extra=4, can_delete=True
+    Budget,
+    BudgetItem,
+    form=BudgetItemForm,
+    fields=["name", "category", "day", "quantity", "unit_cost", "notes"],
+    extra=4,
+    can_delete=True,
 )
 
 
@@ -36,8 +35,10 @@ class BudgetList(ListView):
 
     def get_queryset(self):
         qs = super().get_queryset().select_related("author")
-        if self.request.GET.get("mine") == "1" and \
-           self.request.user.is_authenticated:
+        if (
+            self.request.GET.get("mine") == "1"
+            and self.request.user.is_authenticated
+        ):
             qs = qs.filter(author=self.request.user)
         return qs
 
@@ -47,7 +48,7 @@ class BudgetDetail(DetailView):
     template_name = "budgets/budget_detail.html"
 
 
-class BudgetCreate(LoginRequiredMixin, OwnerOnly, CreateView):
+class BudgetCreate(LoginRequiredMixin, CreateView):
     model = Budget
     fields = ["title", "currency", "notes"]
     template_name = "budgets/budget_form.html"

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ view.object|default:"New" }} Budget{% endblock %}
+{% block content %}
+<h1 class="h4">{{ view.object|default:"New" }} Budget</h1>
+<form method="post">{% csrf_token %}
+  {{ form.as_p }}
+
+  {{ formset.management_form }}
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th>Day</th><th>Item</th><th>Cat.</th>
+          <th class="text-end">Qty</th>
+          <th class="text-end">Unit</th>
+          <th>Notes</th><th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in formset %}
+        <tr data-brow>
+          <td>{{ f.day }}</td>
+          <td>{{ f.name }}</td>
+          <td>{{ f.category }}</td>
+          <td class="text-end">
+            {{ f.quantity }}
+          </td>
+          <td class="text-end">
+            {{ f.unit_cost }}
+          </td>
+          <td>{{ f.notes }}</td>
+          <td>
+            {% if f.instance.pk %}{{ f.DELETE }}{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <p class="fw-semibold">
+    Total: <span id="budget-total">0.00</span> {{ form.instance.currency }}
+  </p>
+
+  <button class="btn btn-primary">Save</button>
+</form>
+{% endblock %}

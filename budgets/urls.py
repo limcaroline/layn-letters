@@ -5,7 +5,6 @@ from .views import (
 )
 
 app_name = "budgets"
-
 urlpatterns = [
     path("", BudgetList.as_view(), name="list"),
     path("create/", BudgetCreate.as_view(), name="create"),

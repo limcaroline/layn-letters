@@ -4,12 +4,29 @@ from django.urls import reverse
 
 
 # Create your models here.
+CURRENCY_CHOICES = [
+    ("SEK", "SEK — Swedish krona"),
+    ("USD", "USD — US dollar"),
+    ("EUR", "EUR — Euro"),
+    ("PHP", "PHP — Philippine peso"),
+    ("GBP", "GBP — British pound"),
+    ("JPY", "JPY — Japanese yen"),
+    ("CNY", "CNY — Chinese yuan"),
+    ("AUD", "AUD — Australian dollar"),
+    ("CAD", "CAD — Canadian dollar"),
+    ("CHF", "CHF — Swiss franc"),
+    ("NZD", "NZD — New Zealand dollar"),
+    ]
+
+
 class Budget(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE
     )
     title = models.CharField(max_length=120)
-    currency = models.CharField(max_length=8, default="USD")
+    currency = models.CharField(
+        max_length=8, default="SEK", choices=CURRENCY_CHOICES
+    )
     notes = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
