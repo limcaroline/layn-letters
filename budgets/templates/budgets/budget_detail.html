@@ -39,7 +39,7 @@
 </table>
 
 {% if user.is_authenticated %}
-  {% if user.is_staff or user.username == SITE_OWNER_USERNAME %}
+  {% if user.is_authenticated and user == object.author %}
     <a class="btn btn-outline-secondary"
        href="{% url 'budgets:edit' object.pk %}">Edit</a>
     <a class="btn btn-outline-danger"

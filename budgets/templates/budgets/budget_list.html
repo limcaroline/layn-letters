@@ -4,24 +4,38 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h1 class="h3">Budgets</h1>
   {% if user.is_authenticated %}
-    {% if user.is_staff or user.username == SITE_OWNER_USERNAME %}
+    <div class="d-flex gap-2">
       <a class="btn btn-primary" href="{% url 'budgets:create' %}">
         New Budget
       </a>
-    {% endif %}
+      <a class="btn btn-outline-secondary" href="{% url 'budgets:list' %}?mine=1">
+        My Budgets
+      </a>
+    </div>
   {% endif %}
 </div>
 
 <ul class="list-group">
   {% for b in object_list %}
-  <li class="list-group-item">
-    <a href="{{ b.get_absolute_url }}"><strong>{{ b.title }}</strong></a>
-    <span class="text-muted small ms-2">
-      {{ b.currency }} · {{ b.created|date:"M j, Y" }}
-    </span>
-  </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        <a href="{{ b.get_absolute_url }}"><strong>{{ b.title }}</strong></a>
+        <span class="text-muted small ms-2">
+          {{ b.currency }} · {{ b.created|date:"M j, Y" }}
+        </span>
+        <span class="text-muted small ms-2">by {{ b.author }}</span>
+      </div>
+      {% if user.is_authenticated and user == b.author %}
+        <div class="btn-group">
+          <a class="btn btn-sm btn-outline-secondary"
+             href="{% url 'budgets:edit' b.pk %}">Edit</a>
+          <a class="btn btn-sm btn-outline-danger"
+             href="{% url 'budgets:delete' b.pk %}">Delete</a>
+        </div>
+      {% endif %}
+    </li>
   {% empty %}
-  <li class="list-group-item text-muted">No budgets yet.</li>
+    <li class="list-group-item text-muted">No budgets yet.</li>
   {% endfor %}
 </ul>
 {% endblock %}
