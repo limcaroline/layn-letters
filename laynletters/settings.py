@@ -17,6 +17,10 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from a .env file
+from dotenv import load_dotenv
+load_dotenv(BASE_DIR / ".env")
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -121,9 +125,13 @@ AUTHENTICATION_BACKENDS = [
 ]
 LOGIN_URL = "account_login"
 LOGIN_REDIRECT_URL = 'core:home'
-ACCOUNT_AUTHENTICATION_METHOD = "username_email"
-ACCOUNT_EMAIL_REQUIRED = False
-ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_LOGIN_METHODS = {"email", "username"}
+ACCOUNT_SIGNUP_FIELDS = [
+    "username*",
+    "password1*",
+    "password2*",
+    "email*", 
+]
 ACCOUNT_EMAIL_VERIFICATION = 'none'  # dev only
 
 SITE_OWNER_USERNAME = os.environ.get("SITE_OWNER_USERNAME", "")

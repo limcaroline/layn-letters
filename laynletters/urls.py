@@ -23,4 +23,5 @@ urlpatterns = [
     path('stories/', include('stories.urls')),
     path('itineraries/', include('itineraries.urls')),
     path("reviews/", include("reviews.urls")),
+    path("budgets/", include("budgets.urls")),
 ]
