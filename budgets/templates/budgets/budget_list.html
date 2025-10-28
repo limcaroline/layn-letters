@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Budgets — Layn Letters{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3">Budgets</h1>
+  {% if user.is_authenticated %}
+    {% if user.is_staff or user.username == SITE_OWNER_USERNAME %}
+      <a class="btn btn-primary" href="{% url 'budgets:create' %}">
+        New Budget
+      </a>
+    {% endif %}
+  {% endif %}
+</div>
+
+<ul class="list-group">
+  {% for b in object_list %}
+  <li class="list-group-item">
+    <a href="{{ b.get_absolute_url }}"><strong>{{ b.title }}</strong></a>
+    <span class="text-muted small ms-2">
+      {{ b.currency }} · {{ b.created|date:"M j, Y" }}
+    </span>
+  </li>
+  {% empty %}
+  <li class="list-group-item text-muted">No budgets yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

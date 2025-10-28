@@ -13,12 +13,14 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 import dj_database_url
 from pathlib import Path
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 # Load environment variables from a .env file
-from dotenv import load_dotenv
 load_dotenv(BASE_DIR / ".env")
 
 
@@ -130,7 +132,7 @@ ACCOUNT_SIGNUP_FIELDS = [
     "username*",
     "password1*",
     "password2*",
-    "email*", 
+    "email*",
 ]
 ACCOUNT_EMAIL_VERIFICATION = 'none'  # dev only
 

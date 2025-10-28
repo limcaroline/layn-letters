@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}{{ object.title }} — Budget{% endblock %}
+{% block content %}
+<h1 class="h4">{{ object.title }}</h1>
+<p class="text-muted small mb-2">
+  Currency: {{ object.currency }}
+  · Created {{ object.created|date:"M j, Y" }}
+</p>
+{% if object.notes %}<p>{{ object.notes|linebreaks }}</p>{% endif %}
+
+<table class="table align-middle">
+  <thead>
+    <tr>
+      <th>Day</th><th>Item</th><th>Cat.</th>
+      <th class="text-end">Qty</th>
+      <th class="text-end">Unit</th>
+      <th class="text-end">Line</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for it in object.items.all %}
+    <tr>
+      <td>{{ it.day }}</td>
+      <td>{{ it.name }}</td>
+      <td>{{ it.category }}</td>
+      <td class="text-end">{{ it.quantity }}</td>
+      <td class="text-end">{{ it.unit_cost }}</td>
+      <td class="text-end">
+        {{ it.quantity|floatformat:2|add:"0"|safe|default:"0" }}
+        {% comment %}
+        Simple display; server calc in model is ok for admin.
+        {% endcomment %}
+      </td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="6" class="text-muted">No items yet.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% if user.is_authenticated %}
+  {% if user.is_staff or user.username == SITE_OWNER_USERNAME %}
+    <a class="btn btn-outline-secondary"
+       href="{% url 'budgets:edit' object.pk %}">Edit</a>
+    <a class="btn btn-outline-danger"
+       href="{% url 'budgets:delete' object.pk %}">Delete</a>
+  {% endif %}
+{% endif %}
+{% endblock %}
