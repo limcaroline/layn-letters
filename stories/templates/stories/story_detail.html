@@ -8,7 +8,7 @@
     {% if object.category %} · {{ object.category.name }}{% endif %}
   </p>
   {% if object.cover_image %}
-    <img src="{{ object.cover_image.url }}" class="img-fluid mb-3" alt="">
+    <img src="{{ object.cover_image.url }}" class="img-fluid mb-3" alt="{{ object.title }}">
   {% endif %}
   <div>{{ object.content|linebreaks }}</div>
 </article>
