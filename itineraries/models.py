@@ -5,6 +5,18 @@ from django.utils.text import slugify
 
 
 # Create your models here.
+def unique_slugify(instance, value, slug_field="slug", max_len=170):
+    base = slugify(value)[:max_len] or "itinerary"
+    slug = base
+    Model = instance.__class__
+    n = 2
+    while Model.objects.filter(**{slug_field: slug}).exists():
+        suf = f"-{n}"
+        slug = f"{base[: max_len - len(suf)]}{suf}"
+        n += 1
+    return slug
+
+
 class Itinerary(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE
@@ -26,7 +38,7 @@ class Itinerary(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)[:170]
+            self.slug = unique_slugify(self, self.title, "slug", 170)
         super().save(*args, **kwargs)
 
 
