@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
+from django.views.generic import RedirectView
 from django.conf.urls.static import static
 
 urlpatterns = [
@@ -26,6 +27,13 @@ urlpatterns = [
     path('itineraries/', include('itineraries.urls')),
     path("reviews/", include("reviews.urls")),
     path("budgets/", include("budgets.urls")),
+    path(
+        'favicon.ico',
+        RedirectView.as_view(
+            url=settings.STATIC_URL + 'img/favicon.ico',
+            permanent=True
+        ),
+    ),
 ]
 
 if settings.DEBUG:
