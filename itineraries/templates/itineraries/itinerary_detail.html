@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ object.title }} — Itinerary{% endblock %}
+{% block content %}
+<h1 class="h4">{{ object.title }}</h1>
+<p class="text-muted">Duration: {{ object.days }} day(s)</p>
+{% if object.notes %}<p>{{ object.notes|linebreaks }}</p>{% endif %}
+
+{% regroup object.items.all by day as days %}
+{% for g in days %}
+<h2 class="h6 mt-3">Day {{ g.grouper }}</h2>
+<ul class="list-group mb-3">
+  {% for it in g.list %}
+  <li class="list-group-item">
+    <strong>{{ it.title }}</strong>
+    {% if it.location %}<span class="text-muted">— {{ it.location }}</span>{% endif %}
+    {% if it.start_time %}<span class="ms-2 small">{{ it.start_time }}</span>{% endif %}
+    {% if it.cost %}<span class="ms-2 small">Cost: {{ it.cost }}</span>{% endif %}
+    {% if it.notes %}<div class="small mt-1">{{ it.notes }}</div>{% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endfor %}
+
+{% if user.is_authenticated and user.is_staff %}
+  <a class="btn btn-outline-secondary"
+     href="{% url 'itineraries:edit' object.slug %}">Edit</a>
+  <a class="btn btn-outline-danger"
+     href="{% url 'itineraries:delete' object.slug %}">Delete</a>
+{% endif %}
+{% endblock %}

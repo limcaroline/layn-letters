@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Delete Itinerary{% endblock %}
+{% block content %}
+<h1 class="h4">Delete Itinerary</h1>
+<p>Delete “{{ object.title }}”?</p>
+<form method="post">{% csrf_token %}
+  <button class="btn btn-danger">Yes, delete.</button>
+</form>
+{% endblock %}

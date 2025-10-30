@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Itineraries — Layn Letters{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3">Itineraries</h1>
+  {% if user.is_authenticated and user.is_staff %}
+    <a class="btn btn-primary" href="{% url 'itineraries:create' %}">
+      New Itinerary
+    </a>
+  {% endif %}
+</div>
+<ul class="list-group">
+  {% for it in object_list %}
+  <li class="list-group-item">
+    <a href="{{ it.get_absolute_url }}"><strong>{{ it.title }}</strong></a>
+    <span class="text-muted small ms-2">
+      {{ it.days }} day(s) · {{ it.created|date:"M j, Y" }}
+    </span>
+  </li>
+  {% empty %}
+  <li class="list-group-item text-muted">No itineraries yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
