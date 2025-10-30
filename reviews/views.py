@@ -80,12 +80,12 @@ class ReviewCreate(LoginRequiredMixin, OwnerOnly, CreateView):
         return super().form_valid(form)
 
 
-class ReviewUpdate(LoginRequiredMixin, AuthorRequired, OwnerOnly, UpdateView):
+class ReviewUpdate(LoginRequiredMixin, OwnerOnly, UpdateView):
     model = Review
     form_class = ReviewForm
 
 
-class ReviewDelete(LoginRequiredMixin, AuthorRequired, OwnerOnly, DeleteView):
+class ReviewDelete(LoginRequiredMixin, OwnerOnly, DeleteView):
     model = Review
     success_url = reverse_lazy("reviews:list")
 

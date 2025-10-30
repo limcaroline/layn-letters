@@ -1,9 +1,32 @@
 {% extends "base.html" %}
-{% block title %}{{ view.object|default:'New' }} Review{% endblock %}
+{% block title %}{{ view.object|default:"New" }} Review{% endblock %}
 {% block content %}
 <h1 class="h4">{{ view.object|default:"New" }} Review</h1>
-<form method="post">{% csrf_token %}
-  {{ form.as_p }}
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+
+  <div class="mb-3">
+    {{ form.place.label_tag }} {{ form.place }} {{ form.place.errors }}
+  </div>
+  <div class="mb-3">
+    {{ form.title.label_tag }} {{ form.title }} {{ form.title.errors }}
+  </div>
+  <div class="mb-3">
+    {{ form.rating.label_tag }} {{ form.rating }} {{ form.rating.errors }}
+  </div>
+  <div class="mb-3">
+    {{ form.body.label_tag }} {{ form.body }} {{ form.body.errors }}
+  </div>
+  <div class="mb-3">
+    {{ form.photo.label_tag }} {{ form.photo }} {{ form.photo.errors }}
+  </div>
+  <div class="mb-3">
+    {{ form.visited_on.label_tag }} {{ form.visited_on }}
+    {{ form.visited_on.errors }}
+  </div>
+
   <button class="btn btn-primary">Save</button>
+  <a class="btn btn-secondary" href="{% url 'reviews:list' %}">Cancel</a>
 </form>
 {% endblock %}
