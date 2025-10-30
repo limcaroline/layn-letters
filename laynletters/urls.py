@@ -26,12 +26,6 @@ urlpatterns = [
     path('itineraries/', include('itineraries.urls')),
     path("reviews/", include("reviews.urls")),
     path("budgets/", include("budgets.urls")),
-    path(
-        'favicon.ico',
-        RedirectView.as_view(
-            url=static('img/favicon.ico'), permanent=True
-        ),
-    ),
 ]
 
 if settings.DEBUG:
