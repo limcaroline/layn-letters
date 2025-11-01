@@ -191,9 +191,7 @@ DATE_INPUT_FORMATS = ['%Y-%m-%d']
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR/'laynletters'/'static']
-STATICFILES_STORAGE = (
-    "whitenoise.storage.CompressedManifestStaticFilesStorage"
-)
+
 STATIC_ROOT = BASE_DIR/'staticfiles'
 
 # Default primary key field type
@@ -208,12 +206,20 @@ MEDIA_ROOT = BASE_DIR / "media"
 # Cloudinary (prod)
 CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL", "")
 
-if CLOUDINARY_URL and not DEBUG:
-    DEFAULT_FILE_STORAGE = (
-        "cloudinary_storage.storage.MediaCloudinaryStorage"
-    )
+if CLOUDINARY_URL:
+    STORAGES = {
+        "default": {
+            "BACKEND":
+            "cloudinary_storage.storage.MediaCloudinaryStorage",
+        },
+        "staticfiles": {
+            "BACKEND":
+            "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
     CLOUDINARY_SECURE = True
 
+# CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1",
     "http://localhost",
