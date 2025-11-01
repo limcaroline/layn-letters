@@ -24,7 +24,8 @@ class ReviewForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["visited_on"].widget.attrs["max"] = date.today().isoformat()
+        today_iso = date.today().isoformat()
+        self.fields["visited_on"].widget.attrs["max"] = today_iso
 
     def clean_visited_on(self):
         d = self.cleaned_data.get("visited_on")

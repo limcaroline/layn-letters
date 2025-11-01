@@ -3,6 +3,7 @@ from .views import (
     StoryList, StoryDetail, StoryCreate, StoryUpdate, StoryDelete, VoteToggle
 )
 
+
 app_name = "stories"
 
 urlpatterns = [
