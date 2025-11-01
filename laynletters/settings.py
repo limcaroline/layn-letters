@@ -73,6 +73,8 @@ INSTALLED_APPS = [
     'reviews',
     'budgets',
     'accounts',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 SITE_ID = 1
@@ -202,6 +204,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Media files
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# Cloudinary (prod)
+CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL", "")
+
+if CLOUDINARY_URL and not DEBUG:
+    DEFAULT_FILE_STORAGE = (
+        "cloudinary_storage.storage.MediaCloudinaryStorage"
+    )
+    CLOUDINARY_SECURE = True
 
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1",
