@@ -46,9 +46,8 @@ class ItineraryItem(models.Model):
     itinerary = models.ForeignKey(
         Itinerary, on_delete=models.CASCADE, related_name="items"
     )
-    day = models.PositiveIntegerField(default=1)
+    days = models.PositiveIntegerField(default=1)
     title = models.CharField(max_length=120)
     location = models.CharField(max_length=120, blank=True)
     notes = models.CharField(max_length=240, blank=True)
     start_time = models.TimeField(null=True, blank=True)
-    cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)

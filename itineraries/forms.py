@@ -12,8 +12,7 @@ class ItineraryForm(forms.ModelForm):
 class ItineraryItemForm(forms.ModelForm):
     class Meta:
         model = ItineraryItem
-        fields = ["day", "title", "location", "notes", "start_time", "cost"]
-        widgets = {"cost": forms.NumberInput(attrs={"step": "0.01"})}
+        fields = ["days", "title", "location", "notes", "start_time"]
 
 
 ItemFormSet = inlineformset_factory(
