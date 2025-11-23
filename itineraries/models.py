@@ -22,7 +22,7 @@ class Itinerary(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE
     )
     title = models.CharField(max_length=150)
-    slug = models.SlugField(max_length=170, unique=True)
+    slug = models.SlugField(max_length=170, unique=True, blank=True)
     days = models.PositiveIntegerField(default=1)
     notes = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -38,7 +38,20 @@ class Itinerary(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = unique_slugify(self, self.title, "slug", 170)
+            base = slugify(self.title)[:160]
+            slug = base or "itinerary"
+            counter = 1
+
+            from .models import Itinerary
+            Model = type(self)
+
+            while Model.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                counter += 1
+                suffix = f"-{counter}"
+                slug = f"{base[:160 - len(suffix)]}{suffix}"
+
+            self.slug = slug
+
         super().save(*args, **kwargs)
 
 
