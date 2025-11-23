@@ -8,14 +8,14 @@
   <div class="table-responsive">
     <table class="table align-middle">
       <thead>
-        <tr><th>Days</th><th>Title</th><th>Location</th>
-            <th>Notes</th><th>Start</th><th>Delete</th></tr>
+        <tr><th>Day</th><th>Title</th><th>Location</th>
+            <th>Notes</th><th>Delete</th></tr>
       </thead>
       <tbody>
         {% for f in formset %}
         <tr>
-          <td>{{ f.days }}</td><td>{{ f.title }}</td><td>{{ f.location }}</td>
-          <td>{{ f.notes }}</td><td>{{ f.start_time }}</td>
+          <td>{{ f.day }}</td><td>{{ f.title }}</td><td>{{ f.location }}</td>
+          <td>{{ f.notes }}</td>
           <td>{% if f.instance.pk %}{{ f.DELETE }}{% endif %}</td>
         </tr>
         {% endfor %}

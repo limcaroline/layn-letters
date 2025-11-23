@@ -12,7 +12,7 @@ class ItineraryForm(forms.ModelForm):
 class ItineraryItemForm(forms.ModelForm):
     class Meta:
         model = ItineraryItem
-        fields = ["days", "title", "location", "notes", "start_time"]
+        fields = ["day", "title", "location", "notes"]
 
 
 ItemFormSet = inlineformset_factory(
