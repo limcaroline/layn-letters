@@ -17,7 +17,10 @@ class AuthorOnly(UserPassesTestMixin):
         obj = getattr(self, "object", None)
         if obj is None and hasattr(self, "get_object"):
             obj = self.get_object()
-        return bool(obj and obj.author == self.request.user)
+        if not obj or not self.request.user.is_authenticated:
+            return False
+        return (obj.author == self.request.user or
+                self.request.user.is_staff)
 
 
 ItemFormSet = inlineformset_factory(
@@ -86,10 +89,6 @@ class BudgetUpdate(LoginRequiredMixin, AuthorOnly, UpdateView):
     model = Budget
     fields = ["title", "currency", "notes"]
     template_name = "budgets/budget_form.html"
-
-    def dispatch(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

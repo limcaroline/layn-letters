@@ -1,6 +1,8 @@
+from decimal import Decimal
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
+from django.db.models import Sum, F, DecimalField, ExpressionWrapper
 
 
 # Create your models here.
@@ -39,6 +41,18 @@ class Budget(models.Model):
     def get_absolute_url(self):
         return reverse("budgets:detail", args=[self.pk])
 
+    @property
+    def total_amount(self):
+        agg = self.items.aggregate(
+            total=Sum(
+                ExpressionWrapper(
+                    F("quantity") * F("unit_cost"),
+                    output_field=DecimalField(max_digits=12, decimal_places=2),
+                )
+            )
+        )
+        return agg["total"] or Decimal("0")
+
 
 class BudgetItem(models.Model):
     budget = models.ForeignKey(
@@ -53,5 +67,8 @@ class BudgetItem(models.Model):
     )
     notes = models.CharField(max_length=200, blank=True)
 
+    @property
     def line_total(self):
-        return (self.quantity or 0) * (self.unit_cost or 0)
+        q = self.quantity or Decimal("0")
+        p = self.unit_cost or Decimal("0")
+        return q * p

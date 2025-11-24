@@ -132,7 +132,7 @@ class ReviewCommentVoteToggle(LoginRequiredMixin, View):
             comment=cm, user=request.user, defaults={"value": value}
         )
         if not created:
-                vote.value = value
-                vote.save()
+            vote.value = value
+            vote.save()
 
         return redirect(cm.review.get_absolute_url())

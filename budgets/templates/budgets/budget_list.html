@@ -25,15 +25,22 @@
         </span>
         <span class="text-muted small ms-2">by {{ b.author }}</span>
       </div>
-      {% if user.is_authenticated and user == b.author %}
-        <div class="btn-group">
-          <a class="btn btn-sm btn-outline-secondary"
-             href="{% url 'budgets:edit' b.pk %}">Edit</a>
-          <a class="btn btn-sm btn-outline-danger"
-             href="{% url 'budgets:delete' b.pk %}">Delete</a>
+
+      <div class="text-end">
+        <div class="fw-semibold">
+          {{ b.total_amount|floatformat:2 }} {{ b.currency }}
         </div>
-      {% endif %}
+        {% if user.is_authenticated and user == b.author %}
+          <div class="btn-group mt-1">
+            <a class="btn btn-sm btn-outline-secondary"
+              href="{% url 'budgets:edit' b.pk %}">Edit</a>
+            <a class="btn btn-sm btn-outline-danger"
+              href="{% url 'budgets:delete' b.pk %}">Delete</a>
+          </div>
+        {% endif %}
+      </div>
     </li>
+
   {% empty %}
     <li class="list-group-item text-muted">No budgets yet.</li>
   {% endfor %}
