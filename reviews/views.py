@@ -128,11 +128,31 @@ class ReviewCommentVoteToggle(LoginRequiredMixin, View):
     def post(self, request, pk):
         cm = get_object_or_404(ReviewComment, pk=pk)
         value = int(request.POST.get("value", 1))
+
         vote, created = ReviewCommentVote.objects.get_or_create(
-            comment=cm, user=request.user, defaults={"value": value}
+            comment=cm,
+            user=request.user,
+            defaults={"value": 0},
         )
-        if not created:
-            vote.value = value
+
+        current = 0 if created else vote.value
+
+        if value == 1:
+            # upvote: increase by 1 and max is +1
+            new = min(current + 1, 1)
+        elif value == -1:
+            # downvote: decrease by 1 and min is -1
+            new = max(current - 1, -1)
+        else:
+            new = current
+
+        if new == 0:
+            if not created:
+                vote.delete()
+        else:
+            vote.value = new
             vote.save()
 
         return redirect(cm.review.get_absolute_url())
+
+

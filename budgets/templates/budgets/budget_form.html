@@ -1,124 +1,57 @@
-{% extends "base.html" %}
-{% block title %}{{ view.object|default:"New" }} Budget{% endblock %}
-{% block content %}
+{% extends "base.html" %} {% block title %}{{ view.object|default:"New" }}
+Budget{% endblock %} {% block content %}
 <h1 class="h4">{{ view.object|default:"New" }} Budget</h1>
-<form method="post">{% csrf_token %}
+<form method="post" id="budget-form">
+  {% csrf_token %} {{ form.non_field_errors }}
 
-  {{ form.non_field_errors }}
-  
   <div class="mb-3">
-    {{ form.title.label_tag }} {{ form.title }}
-    {{ form.title.errors }}
+    {{ form.title.label_tag }} {{ form.title }} {{ form.title.errors }}
   </div>
   <div class="mb-3">
-    {{ form.currency.label_tag }} {{ form.currency }}
-    {{ form.currency.errors }}
+    {{ form.currency.label_tag }} {{ form.currency }} {{ form.currency.errors }}
   </div>
   <div class="mb-3">
-    {{ form.notes.label_tag }} {{ form.notes }}
-    {{ form.notes.errors }}
+    {{ form.notes.label_tag }} {{ form.notes }} {{ form.notes.errors }}
   </div>
 
-  <hr>
+  <hr />
 
   <h2 class="h5 mb-2">Items</h2>
 
-  {{ formset.management_form }}
-  {{ formset.non_form_errors }}
+  {{ formset.management_form }} {{ formset.non_form_errors }}
 
   <div class="table-responsive">
     <table class="table align-middle">
       <thead>
         <tr>
-          <th>Day</th><th>Item</th><th>Category</th>
+          <th>Day</th>
+          <th>Item</th>
+          <th>Category</th>
           <th class="text-end">Qty.</th>
           <th class="text-end">Price</th>
-          <th>Notes</th><th>Delete</th>
+          <th>Notes</th>
+          <th>Delete</th>
         </tr>
       </thead>
       <tbody>
-        {% for f in formset %}
-        {{ f.id }}
-          <tr>
-            <td>
-              {{ f.day }}
-              {{ f.day.errors }}
-            </td>
-            <td>
-              {{ f.name }}
-              {{ f.name.errors }}
-            </td>
-            <td>
-              {{ f.category }}
-              {{ f.category.errors }}
-            </td>
-            <td class="text-end">
-              {{ f.quantity }}
-              {{ f.quantity.errors }}
-            </td>
-            <td class="text-end">
-              {{ f.unit_cost }}
-              {{ f.unit_cost.errors }}
-            </td>
-            <td>
-              {{ f.notes }}
-              {{ f.notes.errors }}
-            </td>
-            <td>
-              {% if f.instance.pk %}
-                {{ f.DELETE }} Delete
-              {% endif %}
-            </td>
-          </tr>
+        {% for f in formset %} {{ f.id }}
+        <tr>
+          <td>{{ f.day }} {{ f.day.errors }}</td>
+          <td>{{ f.name }} {{ f.name.errors }}</td>
+          <td>{{ f.category }} {{ f.category.errors }}</td>
+          <td class="text-end">{{ f.quantity }} {{ f.quantity.errors }}</td>
+          <td class="text-end">{{ f.unit_cost }} {{ f.unit_cost.errors }}</td>
+          <td>{{ f.notes }} {{ f.notes.errors }}</td>
+          <td>{% if f.instance.pk %} {{ f.DELETE }} Delete {% endif %}</td>
+        </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 
-  <p class="fw-semibold">
-    Total: <span id="budget-total">0.00</span> {{ form.instance.currency }}
-  </p>
-
   <button class="btn btn-primary">Save</button>
   <a class="btn btn-secondary" href="{% url 'budgets:list' %}">Cancel</a>
+
 </form>
 
-<script>
-  (function () {
-    function parseNumber(val) {
-      if (!val) return 0;
-      val = String(val).replace(',', '.');
-      var num = parseFloat(val);
-      return isNaN(num) ? 0 : num;
-    }
-
-    function recalc() {
-      var grand = 0;
-
-      document.querySelectorAll("input[name$='-quantity']").forEach(function (qtyInput) {
-        var prefix = qtyInput.name.replace(/-quantity$/, "");
-        var priceInput = document.querySelector("input[name='" + prefix + "-unit_cost']");
-        if (!priceInput) return;
-
-        var qty = parseNumber(qtyInput.value);
-        var price = parseNumber(priceInput.value);
-        grand += qty * price;
-      });
-
-      var totalEl = document.getElementById("budget-total");
-      if (totalEl) {
-        totalEl.textContent = grand.toFixed(2);
-      }
-    }
-
-    document.addEventListener("input", function (e) {
-      if (!e.target.name) return;
-      if (e.target.name.endsWith("-quantity") || e.target.name.endsWith("-unit_cost")) {
-        recalc();
-      }
-    });
-
-    document.addEventListener("DOMContentLoaded", recalc);
-  })();
-</script>
 {% endblock %}

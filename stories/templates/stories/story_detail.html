@@ -25,10 +25,12 @@
     {% endif %}
   {% endif %}
 
-  <button class="btn btn-success" id="upvote">👍 Upvote</button>
-  <button class="btn btn-outline-secondary" id="downvote">👎 Downvote</button>
-  <span class="align-self-center ms-2">Score:
-    <strong id="score">{{ object.votes.aggregate_total }}</strong></span>
+  {% if user.is_staff or user.username == SITE_OWNER_USERNAME %}
+    <button class="btn btn-success" id="upvote">👍 Upvote</button>
+    <button class="btn btn-outline-secondary" id="downvote">👎 Downvote</button>
+    <span class="align-self-center ms-2">Score:
+      <strong id="score">{{ object.votes.aggregate_total }}</strong></span>
+  {% endif %}
 </div>
 
 <script>
