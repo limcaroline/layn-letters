@@ -1,0 +1,26 @@
+[Layn Letters – Testing](#layn-letters--testing)
+  - [Responsiveness](#responsiveness)
+    - [Mobile Screenshots](#mobile-screenshots)
+    - [Tablet Screenshots](#tablet-screenshots)
+    - [Desktop Screenshots](#desktop-screenshots)
+  - [Validations](#validations)
+    - [W3C Validator](#w3c-validator)
+    - [JSHint](#jshint)
+    - [Python Linter](#python-linter)
+  - [Lighthouse](#lighthouse)
+  - [Wave Webaim](#wave-webaim)
+  - [Browser Compatibility](#browser-compatibility)
+  - [Full Testing](#full-testing)
+    - [Navigation](#navigation)
+    - [Reviews](#reviews)
+    - [Stories](#stories)
+    - [Budgets](#budgets)
+    - [Authentication](#authentication)
+  - [Bugs](#bugs)
+    - [Solved Bugs](#solved-bugs)
+      - [Detailed Debug Notes](#detailed-debug-notes)
+    - [Known Bugs](#known-bugs)
+
+---
+
+## Responsiveness
