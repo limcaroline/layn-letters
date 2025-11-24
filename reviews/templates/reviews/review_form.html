@@ -2,7 +2,7 @@
 {% block title %}{{ view.object|default:"New" }} Review{% endblock %}
 {% block content %}
 <h1 class="h4">{{ view.object|default:"New" }} Review</h1>
-<form method="post" enctype="multipart/form-data">
+<form method="post">
   {% csrf_token %}
   {{ form.non_field_errors }}
 
@@ -17,9 +17,6 @@
   </div>
   <div class="mb-3">
     {{ form.body.label_tag }} {{ form.body }} {{ form.body.errors }}
-  </div>
-  <div class="mb-3">
-    {{ form.photo.label_tag }} {{ form.photo }} {{ form.photo.errors }}
   </div>
   <div class="mb-3">
     {{ form.visited_on.label_tag }} {{ form.visited_on }}

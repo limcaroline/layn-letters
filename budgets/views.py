@@ -15,6 +15,8 @@ from .forms import BudgetItemForm
 class AuthorOnly(UserPassesTestMixin):
     def test_func(self):
         obj = getattr(self, "object", None)
+        if obj is None and hasattr(self, "get_object"):
+            obj = self.get_object()
         return bool(obj and obj.author == self.request.user)
 
 

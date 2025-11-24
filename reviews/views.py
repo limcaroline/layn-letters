@@ -2,7 +2,6 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin, UserPassesTestMixin
 )
 from django.db.models import Avg, Sum
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views import View
@@ -50,6 +49,7 @@ class ReviewDetail(DetailView):
         ctx["comments"] = (
             ReviewComment.objects.filter(review=self.object)
             .select_related("author")
+            .annotate(score=Sum("votes__value"))
             .order_by("-created")
         )
         ctx["place_avg"] = (
@@ -132,7 +132,7 @@ class ReviewCommentVoteToggle(LoginRequiredMixin, View):
             comment=cm, user=request.user, defaults={"value": value}
         )
         if not created:
-            vote.value = value
-            vote.save()
-        score = cm.votes.aggregate(total=Sum("value"))["total"] or 0
-        return JsonResponse({"score": score})
+                vote.value = value
+                vote.save()
+
+        return redirect(cm.review.get_absolute_url())

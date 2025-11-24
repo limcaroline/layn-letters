@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 
 
 # Create your models here.
@@ -29,6 +30,18 @@ class Place(models.Model):
 
     def avg_rating(self):
         return self.reviews.aggregate(models.Avg("rating"))["rating__avg"]
+
+
+def unique_slugify(instance, value, slug_field="slug", max_len=170):
+    base = slugify(value)[:max_len] or "review"
+    slug = base
+    Model = instance.__class__
+    n = 2
+    while Model.objects.filter(**{slug_field: slug}).exists():
+        suf = f"-{n}"
+        slug = f"{base[: max_len - len(suf)]}{suf}"
+        n += 1
+    return slug
 
 
 class Review(models.Model):
