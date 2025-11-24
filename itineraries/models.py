@@ -63,3 +63,6 @@ class ItineraryItem(models.Model):
     title = models.CharField(max_length=120)
     location = models.CharField(max_length=120, blank=True)
     notes = models.CharField(max_length=240, blank=True)
+
+    class Meta:
+        ordering = ["day", "id"]

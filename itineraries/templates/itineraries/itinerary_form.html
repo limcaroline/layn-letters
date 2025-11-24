@@ -3,8 +3,22 @@
 {% block content %}
 <h1 class="h4">{{ view.object|default:"New" }} Itinerary</h1>
 <form method="post">{% csrf_token %}
+
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger">
+      {{ form.non_field_errors }}
+    </div>
+  {% endif %}
+
   {{ form.as_p }}
   {{ formset.management_form }}
+
+  {% if formset.non_form_errors %}
+    <div class="alert alert-danger">
+      {{ formset.non_form_errors }}
+    </div>
+  {% endif %}
+
   <div class="table-responsive">
     <table class="table align-middle">
       <thead>
@@ -14,6 +28,19 @@
       <tbody>
         {% for f in formset %}
         <tr>
+          {% for hidden in f.hidden_fields %}
+            {{ hidden }}
+          {% endfor %}
+
+          {# Show field errors per row #}
+          {% if f.errors %}
+            <td colspan="5">
+              <div class="alert alert-danger mb-2">
+                {{ f.errors }}
+              </div>
+            </td>
+          {% endif %}
+          
           <td>{{ f.day }}</td><td>{{ f.title }}</td><td>{{ f.location }}</td>
           <td>{{ f.notes }}</td>
           <td>{% if f.instance.pk %}{{ f.DELETE }}{% endif %}</td>

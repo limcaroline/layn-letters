@@ -31,6 +31,11 @@ class ItineraryDetail(DetailView):
     slug_field = "slug"
     slug_url_kwarg = "slug"
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["items"] = self.object.items.order_by("day", "id")
+        return ctx
+
 
 class ItineraryCreate(LoginRequiredMixin, OwnerOnly, CreateView):
     model = Itinerary
@@ -51,7 +56,10 @@ class ItineraryCreate(LoginRequiredMixin, OwnerOnly, CreateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx["formset"] = ItemFormSet()
+        if self.request.method == "POST":
+            ctx["formset"] = ItemFormSet(self.request.POST)
+        else:
+            ctx["formset"] = ItemFormSet()
         return ctx
 
 
@@ -64,7 +72,13 @@ class ItineraryUpdate(LoginRequiredMixin, OwnerOnly, UpdateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx["formset"] = ItemFormSet(instance=self.object)
+        if self.request.method == "POST":
+            ctx["formset"] = ItemFormSet(
+                self.request.POST,
+                instance=self.object
+            )
+        else:
+            ctx["formset"] = ItemFormSet(instance=self.object)
         return ctx
 
     def post(self, request, *args, **kwargs):
@@ -75,6 +89,7 @@ class ItineraryUpdate(LoginRequiredMixin, OwnerOnly, UpdateView):
             form.save()
             formset.save()
             return redirect(self.object.get_absolute_url())
+
         ctx = self.get_context_data(form=form)
         ctx["formset"] = formset
         return self.render_to_response(ctx)
