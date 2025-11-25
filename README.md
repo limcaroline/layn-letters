@@ -260,4 +260,4 @@ Open: http://127.0.0.1:8000/
 - Django documentation https://docs.djangoproject.com/en/5.2/ 
 - w3schools for python tutorials and materials https://www.w3schools.com/ 
 - learnpython.org for python tutorials and materials https://www.learnpython.org/
-- ChatGPT by OpenAI for assistance with ideas, debugging, documentation, wording, code refactoring
+- ChatGPT by OpenAI for assistance with ideas, debugging, documentation, wording and such
