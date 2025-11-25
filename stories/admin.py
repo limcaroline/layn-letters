@@ -13,7 +13,6 @@ class CategoryAdmin(admin.ModelAdmin):
 class StoryAdmin(admin.ModelAdmin):
     list_display = ("title", "author", "status", "created")
     list_filter = ("status", "category", "created")
-    search_fields = ("title", "content")
     prepopulated_fields = {"slug": ("title",)}
 
 
