@@ -4,22 +4,20 @@
       Layn Letters
     </a>
 
+    <!-- HAMBURGER (stays exactly like this) -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#mainNav" aria-controls="mainNav"
             aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    <!-- Responsive navbar -->
     <div class="collapse navbar-collapse flex-column" id="mainNav">
 
-      <!-- Account -->
       {% if user.is_authenticated %}
         <ul class="navbar-nav w-100 mb-3">
           <li class="nav-item">
             <span class="nav-link disabled">Hello, {{ user.username }}</span>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'account_email' %}">Account</a>
           </li>
         </ul>
       {% else %}
@@ -34,7 +32,6 @@
         </ul>
       {% endif %}
 
-      <!-- Content -->
       <ul class="navbar-nav w-100 flex-column mb-3">
         <li class="nav-item">
           <a class="nav-link" href="{% url 'stories:list' %}">Stories</a>
@@ -50,7 +47,6 @@
         </li>
       </ul>
 
-      <!-- Logout -->
       {% if user.is_authenticated %}
         <ul class="navbar-nav w-100 mt-auto pt-3 border-top">
           <li class="nav-item">
