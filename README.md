@@ -271,5 +271,6 @@ Open: http://127.0.0.1:8000/
 
 - Django documentation and Bootstrap documentation.
 - Validator tools: W3C, Jigsaw, JSHint, Flake8.
-- Code Insitute Models
-- ChatGPT by OpenAI for ideas, debugging, documentation
+- Code Insitute Modules
+- StackOverflow
+- ChatGPT by OpenAI for assistance with ideas, debugging, documentation, wording, code refactoring
