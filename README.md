@@ -71,8 +71,8 @@ As the site owner I want to:
 
 ### Structure and Layout
 - Global navigation bar with links to Home, Stories, Itineraries, Reviews, Budgets.
-- Consistent header, content area, and footer using Django template inheritance.
-- Grid layout for lists; simple typographic hierarchy for readability.
+- Consistent header, content area, and footer using Django.
+- Grid layout for lists
 
 ### Typography
 - Google Fonts 
@@ -94,7 +94,7 @@ This project followed a simple agile workflow of Git commits and a project board
 ## Technologies Used
 
 - Python, Django
-- HTML5, CSS3, JavaScript (ES6)
+- HTML5, CSS, JavaScript
 - Bootstrap 5
 - SQLite (development), PostgreSQL (production)
 - Django Allauth for authentication
@@ -102,19 +102,20 @@ This project followed a simple agile workflow of Git commits and a project board
 - Pillow for ImageField support
 - Git and GitHub for version control
 - Heroku for deployment
+- Cloudinary for storage
 
 ---
 
 ## Features
 
-### Core
-- Modular apps: core/home, stories, itineraries, reviews, budgets, accounts.
+### Navigation
+- home, stories, itineraries, reviews, budgets, accounts.
 - Media uploads for story cover images.
 
 ### Stories
 - Owner-only create/edit/delete.
 - Public list and detail views with cover image and date.
-- Commenting and comment voting available to authenticated users.
+- Commenting available to authenticated users.
 
 ### Itineraries
 - Owner-only create/edit/delete.
@@ -127,11 +128,6 @@ This project followed a simple agile workflow of Git commits and a project board
 
 ### Budgets
 - Authenticated visitors can create/edit/delete their own budgets.
-- Live total calculation via JavaScript (data attributes + DOM updates).
-
-### Security and Permissions
-- Owner-only publishing flows enforced with class-based mixins.
-- CSRF protection 
 
 ---
 
@@ -147,6 +143,11 @@ This project followed a simple agile workflow of Git commits and a project board
 | Votes        | Authenticated user | Counts shown | Toggle by voter   | Toggle by voter   |
 
 ---
+
+## Future Enhancements
+Budgets
+- Live total calculation via JavaScript.
+
 
 ## Testing
 
@@ -165,11 +166,6 @@ Summary:
 ---
 
 ## Known Issues and Fixes
-
-- Duplicate slugs during create:
-  - Added slugify logic; users should use unique titles or code appends suffix.
-- Images not displaying:
-  - Ensure `enctype="multipart/form-data"` on form; serve MEDIA in dev; Pillow installed.
 - Date input format confusion:
   - Enforced YYYY-MM-DD, added server-side validation, and UI max=today for visited_on.
 
@@ -179,8 +175,7 @@ Summary:
 
 - `SECRET_KEY`, `DATABASE_URL`, and other secrets via environment variables.
 - `DEBUG=False` in production; `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS` set.
-- HTTPS forced on Heroku; HSTS enabled.
-- Authentication and authorization enforced in all create/update/delete views.
+- Authentication and authorization applied to all create/update/delete views.
 
 ---
 
@@ -195,9 +190,6 @@ Steps:
 git add .
 git commit -m "Deploy"
 git push
-
-markdown
-Copy code
 
 2) Heroku dashboard
 - Create new app (unique name).
@@ -217,9 +209,6 @@ python manage.py migrate
 python manage.py createsuperuser
 python manage.py collectstatic --noinput
 
-yaml
-Copy code
-
 5) Smoke test
 - Visit the live URL.
 - Log into /admin/, create sample data, verify pages.
@@ -235,25 +224,16 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-markdown
-Copy code
-
 Environment:
 - Create `.env` (not committed) with:
 SECRET_KEY=dev-insecure
 DEBUG=on
 ALLOWED_HOSTS=.localhost,127.0.0.1
 
-makefile
-Copy code
-
 Run:
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
-
-yaml
-Copy code
 
 Open: http://127.0.0.1:8000/
 
@@ -271,6 +251,6 @@ Open: http://127.0.0.1:8000/
 
 - Django documentation and Bootstrap documentation.
 - Validator tools: W3C, Jigsaw, JSHint, Flake8.
-- Code Insitute Modules
+- Code Insitute modules and materials
 - StackOverflow
 - ChatGPT by OpenAI for assistance with ideas, debugging, documentation, wording, code refactoring
