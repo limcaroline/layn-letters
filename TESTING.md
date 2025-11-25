@@ -152,7 +152,8 @@ Results, among others:
 - No critical accessibility errors on content pages.
 - Color contrast checks passed after minor design adjustments.
 
-![WAVE results](resources/testing/wave.png)
+![WAVE results](resources/testing/wave-before.png)
+![WAVE results](resources/testing/wave-after.png)
 
 ---
 
