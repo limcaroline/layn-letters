@@ -63,7 +63,7 @@ As the site owner I want to:
 
 
 ### User Stories
-
+(see Projects in Github) https://github.com/limcaroline/layn-letters/
 
 ---
 
@@ -80,8 +80,12 @@ As the site owner I want to:
 
 ### Wireframes
 - Mobile, tablet, and desktop wireframes included under:
-  - resources/wireframes/
 
+  Wireframe for large screens
+  ![Wireframe – Large](resources/testing/wireframe-large.png)
+
+  Wireframe for tablets and mobile
+  ![Wireframe – Tablets and Mobile](resources/testing/wireframe-small.png)
 
 ---
 
@@ -252,5 +256,8 @@ Open: http://127.0.0.1:8000/
 - Django documentation and Bootstrap documentation.
 - Validator tools: W3C, Jigsaw, JSHint, Flake8.
 - Code Insitute modules and materials
-- StackOverflow
+- StackOverflow https://stackoverflow.com/
+- Django documentation https://docs.djangoproject.com/en/5.2/ 
+- w3schools for python tutorials and materials https://www.w3schools.com/ 
+- learnpython.org for python tutorials and materials https://www.learnpython.org/
 - ChatGPT by OpenAI for assistance with ideas, debugging, documentation, wording, code refactoring
